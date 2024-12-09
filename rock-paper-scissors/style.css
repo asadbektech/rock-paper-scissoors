@@ -22,7 +22,7 @@ body {
 }
 
 small{
-  margin-left: 5px;
+  margin-left: 10px;
 }
 
 .wrapper {
@@ -172,10 +172,35 @@ small{
   .reset {
     width: 130px;
     height: 40px;
-    margin-top: 160px;
     font-size: 1.5em;
   }
   .reset:active{
     transform: translateY(5px);
   }
+}
+
+
+.modal{
+  width: 300px;
+  height: 240px;
+  background: white;
+  border: 2px solid black;
+  transform: translateY(-200px);
+  border-radius: 20px;
+}
+
+.t{
+  display: none;
+  position: relative;
+  z-index: 1;
+  transform: translateY(-250px);
+}
+
+.modal p{
+  margin: 30px;
+  font-size: 40px;
+}
+
+.modal button{
+  margin-left: 80px;
 }
