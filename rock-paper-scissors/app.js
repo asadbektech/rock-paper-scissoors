@@ -3,96 +3,78 @@ const comp = document.getElementById('computer');
 const resultGame = document.getElementById('luck');
 const yours = document.getElementById('you');
 const opponent = document.getElementById('opponent');
-
-// Modal elements
 const element = document.getElementById('t');
 const message = document.getElementById('message');
-
-// Buttons
-const rock = document.getElementById('rock');
-const paper = document.getElementById('paper');
-const scissors = document.getElementById('scissors');
+const buttons = document.querySelectorAll('.btn'); // Unified buttons
 
 let yourScore = 0;
 let computerScore = 0;
-let result = '';
+
+// Choices mapping for emoji display
+const emojiMap = {
+  rock: '👊',
+  paper: '🖐',
+  scissors: '✌️'
+};
 
 // Check scores and update the game
 function checkScores() {
-  if (yourScore === 3) {
+  if (yourScore === 3 || computerScore === 3) {
     element.style.display = 'flex';
-    message.textContent = 'You win🥳!';
-    disableButtons();
-  } else if (computerScore === 3) {
-    element.style.display = 'flex';
-    message.textContent = 'You lose😔!';
+    message.textContent = yourScore === 3 ? 'You win🥳!' : 'You lose😔!';
     disableButtons();
   }
 }
 
 // Disable buttons after the game ends
 function disableButtons() {
-  rock.removeAttribute('onclick');
-  paper.removeAttribute('onclick');
-  scissors.removeAttribute('onclick');
+  buttons.forEach(button => button.disabled = true);
 }
 
-// Game function (for rock, paper, and scissors)
+// Game function
 function playGame(userChoice) {
-  const choices = ['rock', 'paper', 'scissors'];
+  const choices = Object.keys(emojiMap);
   const computerChoice = choices[Math.floor(Math.random() * choices.length)];
+  comp.textContent = emojiMap[computerChoice];
 
-  // Display computer's choice
-  if (computerChoice === 'rock') {
-    comp.textContent = '👊';
-  } else if (computerChoice === 'paper') {
-    comp.textContent = '🖐';
-  } else {
-    comp.textContent = '✌️';
-  }
-
-  // Compare choices and determine the result
+  // Determine the result
   if (userChoice === computerChoice) {
-    result = 'It\'s a tie!';
+    resultGame.textContent = 'It\'s a tie!';
   } else if (
     (userChoice === 'rock' && computerChoice === 'scissors') ||
     (userChoice === 'paper' && computerChoice === 'rock') ||
     (userChoice === 'scissors' && computerChoice === 'paper')
   ) {
-    yourScore += 1;
-    result = 'You win!';
+    yourScore++;
+    resultGame.textContent = 'You win!';
   } else {
-    computerScore += 1;
-    result = 'You lose!';
+    computerScore++;
+    resultGame.textContent = 'You lose!';
   }
 
-  // Update result and score
-  resultGame.textContent = result;
+  // Update scores
   yours.textContent = yourScore;
   opponent.textContent = computerScore;
 
-  // Check if anyone has reached 3 points
+  // Check if the game has ended
   checkScores();
 }
 
 // Event listeners for buttons
-rock.addEventListener('click', () => playGame('rock'));
-paper.addEventListener('click', () => playGame('paper'));
-scissors.addEventListener('click', () => playGame('scissors'));
+buttons.forEach(button => {
+  button.addEventListener('click', () => playGame(button.id));
+});
 
 // Reset function to start a new game
 function reset() {
   yourScore = 0;
   computerScore = 0;
-  result = 'Good luck!';
-  resultGame.textContent = result;
+  resultGame.textContent = 'Good luck!';
   yours.textContent = yourScore;
   opponent.textContent = computerScore;
   comp.textContent = '🤝';
   element.style.display = 'none';
 
-  // Re-enable buttons after reset
-  rock.setAttribute('onclick', 'playGame("rock")');
-  paper.setAttribute('onclick', 'playGame("paper")');
-  scissors.setAttribute('onclick', 'playGame("scissors")');
+  // Re-enable buttons
+  buttons.forEach(button => button.disabled = false);
 }
